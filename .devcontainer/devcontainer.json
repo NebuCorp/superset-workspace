@@ -1,0 +1,34 @@
+{
+	"name": "LocalStack and Dev Environment",
+	"dockerComposeFile": ["docker-compose.yml"],
+	"service": "devcontainer-superset",
+	"workspaceFolder": "/workspace",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-azuretools.vscode-docker",
+				"ms-python.python",
+				"mechatroner.rainbow-csv"
+			],
+			"settings": {
+				"git.usernameImportance": "high",
+				"terminal.integrated.defaultProfile.linux": "zsh",
+				"terminal.integrated.profiles.linux": {
+					"zsh": {
+						"path": "/usr/bin/zsh"
+					}
+				},
+				"editor.defaultFormatter": "esbenp.prettier-vscode",
+				"editor.formatOnSave": true,
+				"editor.codeActionsOnSave": {
+					"source.fixAll.eslint": "explicit"
+				}
+			}
+		}
+	},
+	"forwardPorts": [300, 4566],
+	"remoteUser": "root",
+	"mounts": ["source=${localEnv:HOME}/.zsh_history,target=/root/.zsh_history,type=bind"],
+	"postCreateCommand": "mkdir -p ~/.vscode-server/data/Machine && chmod -R 777 ~/.vscode-server",
+	"initializeCommand": "mkdir -p ${localWorkspaceFolder}/.devcontainer/volume"
+}

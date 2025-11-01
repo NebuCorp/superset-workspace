@@ -1,0 +1,32 @@
+FROM apache/superset:4.1.4
+
+USER root
+
+RUN pip install --no-cache-dir psycopg2-binary
+RUN pip install flask-cors
+RUN pip install Pillow
+
+ENV ADMIN_USERNAME=admin
+ENV ADMIN_EMAIL=info@nebustream.com
+ENV ADMIN_PASSWORD=admin
+ENV SUPERSET_ENV=production
+ENV SUPERSET_SECRET_KEY=test
+ENV DATABASE_DIALECT=postgresql
+ENV DATABASE_USER=superset_user
+ENV DATABASE_PASSWORD=admin
+ENV DATABASE_HOST=postgres-superset
+ENV DATABASE_DB=supersetdb
+ENV DATABASE_PORT=5432
+
+
+# Copy initialization script
+COPY ./superset-init.sh /superset-init.sh
+RUN chmod +x /superset-init.sh
+
+# Copy custom superset_config.py (if you have one)
+COPY ./superset_config.py /app/superset_config.py
+
+ENV SUPERSET_CONFIG_PATH /app/superset_config.py
+
+USER superset
+ENTRYPOINT [ "/superset-init.sh" ]
